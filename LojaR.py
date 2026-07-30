@@ -106,11 +106,98 @@ def cadastrar_produto(self):
     self.salvar_dados()
     print("Produto cadastrado e salvo com sucesso!")
 
+# ================================================================
+# SEMANA 6: READ (Listar e buscar produtos)
+# ================================================================
+def listar_produtos(self):
+    print("\n=== LISTA DE PRODUTOS NO ESTOQUE ===")
+
+if len(self.__produtos) == 0:
+    print("Nenhum produto cadsatrado no momento!")
+    return
+
+for produto in self.__produtos:
+    print(produto)
+
+def buscar_produto(self):
+    print("\=== BUSCAR PRODUTO ===")
+    codigo = input("Digite o código do produto: ").strip()
+
+    produto = self.buscar_por_codigo(codigo)
+
+    if produto is None:
+        print("Produto não encotrado!!")
+    else:
+        print("\nProduto encontrado!!")
+        print(produto)
+
 def buscar_por_codigo(self, codigo):
     for produto in self.__produtos:
-        if produto.get_codigo() == codigo:
+        if produto.get.codigo() == codigo:
             return produto
-    return None    
+    return None
+# =================================================================
+# SEMANA 7: UPTADE (atualizar Produto)
+# =================================================================
+def alterar_produto(self):
+    print("\n=== ALTERAR PRODUTO ===")
+    codigo = self.buscar_por_codigo(codigo)
+
+    if produto is None:
+         print("Produto não encontrado.") 
+         return
+
+    print("Dados atuais do produto:")
+    print(produto)
+    print("-" * 30)
+
+    # Alterar Nome
+    novo_nome = input("Novo nome (ou aperte ENTER para manter): ").strip()
+    if novo_nome !="":
+        produto.set_nome(novo_nome)
+
+    #Alterar preço
+    if op_preco == 's':
+       novo_preco = ler_float("Novo preço(R$): ")
+       produto.set_preco(novo_preco)
+    
+    #Alterar quantidade
+    op_qtd = input("Deseja alterar o estoque? (s/n): ").strip().lower()
+    if op_tam == 's':
+        novo_tam = input("Novo tamanho (P, M ,G GG): ").strip().upper()
+        produto.set_tamanho(novo_tam)
+
+self.salvar_dados()
+print("Produto alterado com sucesso!")
+
+# =====================================================================
+# SEMANA 8: DELETE (Excluir produto)
+# =====================================================================
+def remover_produto(self):
+    print("\n=== REMOVER PRODUTO ===")
+    codigo = input("Digite o código do produto a ser removido: ").strip
+
+    produto = self.buscar_por_codigo(codigo)
+
+    if produto is None:
+        print("Produto não encontrado.")
+        return
+
+    print("\nProduto a ser removido: ")
+    print(produto)
+
+    confirma = input("Tem certeza que deseja excluir este produto? (s/n): ").strip().lower()
+
+    if confirma == 's':
+      self.__produtos.remove(produto)
+      self.salvar_dados()
+      print("Produto removido com sucesso!")
+    else:
+        print("Operação cancelada!") 
+
+# =====================================================================
+# SEMANA 4: Persistência de Dados em Arquivo
+# =====================================================================
 # Gravação de arquivos (Escrita)
 def salvar_dados(self):
     try:
@@ -150,7 +237,7 @@ def carregar_dados(self):
         print(f"Erro ao carregar dados: {erro}")
 
 #======================================================
-#FUNÇÕES AUXILIARES E TRATAMENTO DE ERROS
+# FUNÇÕES AUXILIARES E TRATAMENTO DE ERROS
 #======================================================
 def ler_inteiro(mensagem):
     while True:
@@ -167,6 +254,10 @@ def exibir_menu():
     print("  LOJA DE ROUPAS - MENU") 
     print("=" * 40)
     print("1 - Cadastrar Produto")
+    print("2 - Listar Produto")
+    print("3 - Buscar Produto por Código")
+    print("4 - Alterar Produto (Update)")
+    print("5 - Remover produto (Delete)")
     print("0 - Sair")
     print("=" * 40)           
 
@@ -182,11 +273,19 @@ def main():
 
         if opcao == "1":
              loja.cadastrar_produto()
+        elif opcao == "2":
+            loja.listar_produtos()
+        elif opcao == "3":
+            loja.buscar_produto()
+        elif opcao == "4":
+            loja.alterar_produto()
+        elif opcao == "5":
+            loja.remover_produto()    
         elif opcao == "0":
             print("Encerrando o sistema...")
             break
         else:
-            print("Opção inválida!")
+            print("Opção inválida! Tente Novamente.")
 
 if __name__ == "__main__":
     main()                 
