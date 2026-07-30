@@ -12,4 +12,4 @@ Lista de andamento do projeto:
 
 
 
-PARTICIPANTES DO PROJETO:Vinicius Souza, Manoel Vinicius,
+PARTICIPANTES DO PROJETO:Vinicius Souza, Manoel Vinicius,Alberto Junio
