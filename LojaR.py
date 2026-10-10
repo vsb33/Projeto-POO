@@ -1,5 +1,6 @@
 import os
-
+import tkinter as tk
+from tkinter import messagge, ttk
 #======================================================
 # CLASSE BASE: PRODUTO
 #======================================================
@@ -79,32 +80,57 @@ class SistemaLoja:
         self.__produtos = []
         self.__nome.arquivo = "produtos.txt"
         self.carregar_dados()
+    def get_produtos(self):
+        return self.__produtos
 
-#CREATE(função de cadastro)
-def cadastrar_produto(self):
-    print("\n=== CADASTRAR NOVO PRODUTO===")
+    def buscar_por_codigo(self, codigo):
+        for produto in self.__produtos:
+            if produto.get_codigo() == codigo:
+                return produto
+            return None
 
-    codigo = input("Código/ID do produto: ").strip()
+    def adicionar_produto(self, produto):
+        self.__produtos.append(produto)
+        self.salvar.dados()
 
-# Validação pra n duplicar o ID
-    if self.buscar_por_codigo(codigo) is not None:
-         print("Erro: Já existe um produto com esse código!!!")
-    return
+    def remover_produto(self, produto):
+        self.__produtos.remove(produto)
+        self.salar_dados()
 
-    nome = input("Nome da roupa: ").strip()
-    preco = float(input("Preço(R$): "))
-    quantidade = int(input("quantidade em estoque:"))
-    tamanho = input("Tamanho da Roupa(EX:P, M, G, GG): ").strip().upper()
+    def salvar_dados(self):
+        try:
+            with open(self.__nome_arquivo, "w", encoding="utf-8") as arquivo:
+                for produto in self.__produtos:
+                    arquivo.write(produto.transformar_em_linha_txt() + "\n")
+        except Exception as erro:
+            print(f"Erro ao salvar dados: {erro}")
 
-# "Criando" a roupa
-    nova_roupa = Roupa(codigo, nome, preco, quantidade, tamanho)
+    def carregar_dados(self):
+        if not os.path.exists(self.__nome_arquivo):
+            return
 
-# add a lista de memória
-    self.__produtos.append(nova_roupa)
-    
-# Salvando no arquivo de texto
-    self.salvar_dados()
-    print("Produto cadastrado e salvo com sucesso!")
+        try:
+            with open(self.__nome_arquivo, "r", encoding="utf-8") as arquivo:
+                linhas = arquivo.readlines()
+
+            self.__produtos = []
+            for linha in linhas
+               linha = linha.strip()
+               if not linha:
+                   continue
+
+               dados = linha.split(";")
+               if dados[0] == "roupa" and len(dados) == 6:
+                   roupa = Roupa(
+                       codigo=dados[1],
+                       nome=dados[2],
+                       preco=float(dados[3]),
+                       quantidade=int(dados[4]),
+                       tamanho=dados[5],
+                   )    
+                   self.__produtos.append(roupa)
+        except Exception as erro:
+            print(f"Erro ao carregar dados: {erro}")
 
 # ================================================================
 # SEMANA 6: READ (Listar e buscar produtos)
@@ -235,6 +261,49 @@ def carregar_dados(self):
                 self.__produtos.append(roupa)
     except Exception as erro:
         print(f"Erro ao carregar dados: {erro}")
+
+#======================================================
+# Tkinter 3º BImestre
+#======================================================
+class SistemaLojaGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("sistema de Loja de Roupas")
+        self.root.geometry("780x520")
+        self.root.minisiza(700, 450)
+
+        self.sistema = SistemaLoja()
+
+        # Estilo
+        style = ttk.Style()
+        style.theme_use("clam")
+
+        # Semana 1 e 2: Janela principal e Sitema de abas 
+        self.notebook = ttk.Notebook(self.root)
+        self.notebook.pack(fill="both", expand=True, padx=10, pady=10)
+
+        self.aba_listar = ttk.Frame(self.notebook)
+        self.aba_cadastrar = ttk.Frame(self.notebook)
+        self.aba_editar = ttk.Frame(self.notebook)
+        self.aba_excluir = ttk.Frame(self.notebook)
+
+        self.notebook.add(self.aba_listar, text="Listar produtos")
+        self.notebook.add(self.aba_cadastrar, text="Cadastrar")
+        self.notebook.add(self.aba_editar, text="Editar")
+        self.notebook.add(self.aba_excluir, text="Excluir")
+
+        # Construção de cada tela
+        self._construir_aba_listarr()
+        self._construir_aba_cadastrar()
+        self._contruir_aba_editar()
+        self._construir_aba_excluir()
+        
+
+        #Atualiza a tabela ao abrir
+        self.atualizar_tabela()
+
+
+
 
 #======================================================
 # FUNÇÕES AUXILIARES E TRATAMENTO DE ERROS
